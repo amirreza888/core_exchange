@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <link href="./styles.css" rel="stylesheet" />
+    <title>Document</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<body>
+<div class="container">
+
+
+
+
+    <div class="spot_box">
+        <div class="Buy_box ">
+            <div class="form_box">
+                <input  id ="buyPrice" class="item" type="number" placeholder="Price" >
+                <input  id ="buyAmount" class="item" type="number" placeholder="Amount">
+                <button id ="Buy" class="item green_btn btn" type="submit">Buy</button>
+            </div>
+        </div>
+        <div class="Sell_box ">
+            <div class="form_box">
+                <input  id ="sellPrice" class="item" type="text" placeholder="Price" >
+                <input  id ="sellAmount" class="item" type="text" placeholder="Amount">
+                <button id ="Sell" class="item red_btn btn" type="submit">Sell</button>
+            </div>
+        </div>
+    </div>
+    <div class="orders">
+        <div class="open_order">
+            <h3>open_order</h3>
+            <div id="open_order"></div>
+        </div>
+        <div class="order_history">
+            <h3>order_history</h3>
+            <div id="order_history"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+
+<script src="./index.js"></script>
+</html>

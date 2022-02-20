@@ -1,0 +1,22 @@
+{
+  "name": "core_exchange",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bull": "^4.5.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "mathjs": "^10.1.1",
+    "node-redis-pubsub": "^5.0.0",
+    "pm2": "^5.1.2",
+    "redis": "^4.0.3",
+    "socket.io": "^4.4.1"
+  }
+}
