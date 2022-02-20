@@ -7,7 +7,7 @@ const matchEngineQueue = new Queue('mEQ', {
     },
 });
 
-const {matchEngine, Order, eventEmitter} = require("./app");
+const {matchEngine, order} = require("./app");
 
 matchEngineQueue.process('addOrder', orderAdder);
 
@@ -20,8 +20,6 @@ function orderAdder(job, done) {
         matchEngine.market(order);
     done()
 }
-
-
 
 
 module.exports = {matchEngineQueue: matchEngineQueue};
