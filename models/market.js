@@ -1,10 +1,10 @@
 const {Schema, model} = require('mongoose');
 
 
-const blockchainSchema = new Schema({
+const marketSchema = new Schema({
 
 
 }, {timestamps: true});
 
 
-module.exports = model('blockchain', blockchainSchema, 'blockchains');
+module.exports = model('market', marketSchema, 'markets');
