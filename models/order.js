@@ -2,7 +2,7 @@ const {Schema, model} = require('mongoose');
 
 
 const orderSchema = new Schema({
-    id: {type: String, required: true, unique: true},
+    internalId: {type: String, required: true, unique: true},
     type: {
         type: String,
         required: true,

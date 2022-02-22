@@ -1,16 +1,12 @@
-// const events = require('events');
-// const eventEmitter = new events.EventEmitter();
-//
-// module.exports = eventEmitter;
-// //Create an event handler:
-// const myEventHandler = function (are, mmd) {
-//     console.log(are)
-//     console.log(mmd)
-//     console.log('I hear a scream!');
-// }
-//
-// //Assign the event handler to an event:
-// eventEmitter.on('scream', myEventHandler);
-//
-// //Fire the 'scream' event:
-// eventEmitter.emit('scream', "are", "mmd");
+const nrp = require('./modules/nrpModule');
+
+
+for (let i = 0; i < 10_000; i++) {
+    let price = 99 + i / 10;
+    nrp.emit("addOrder",{type:'limit', side:'buy', quantity:Math.floor(Math.random() * 10) + 1,price:price, username:"user1"});
+}
+
+for (let i = 0; i < 10_000; i++) {
+    let price = 100 + i / 10;
+    nrp.emit("addOrder",{type:'limit', side:'sell', quantity:Math.floor(Math.random() * 10) + 1,price:price, username:"user1"});
+}

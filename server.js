@@ -8,7 +8,7 @@ const nrp = require('./modules/nrpModule');
 
 io = socket(server, {
     cors: {
-        origin: "http://localhost:63343",
+        origin: "http://localhost:63342",
         methods: ["GET", "POST"],
         transports: ['websocket', 'polling'],
         credentials: true
@@ -144,7 +144,7 @@ app.get('/price', (req, res) => {
 
 
 app.post('/order', async (req, res) => {
-    let {type, side, quantity, price=0,username = "test"} = req.body;
+    let {type, side, quantity, price=0,username = "user1"} = req.body;
     nrp.emit("addOrder",{type, side, quantity,price, username});
     return res.json({status: true});
 })

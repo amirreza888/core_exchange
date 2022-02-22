@@ -1,5 +1,6 @@
 const nrp = require('./modules/nrpModule');
 
+
 class User {
 
     static dictUsername = {};
@@ -16,20 +17,38 @@ class User {
 }
 
 class Order {
-    constructor(type, side, quantity, user, price,) {
-        this.id = Number();
+    static n = 0;
+    constructor(type, side, quantity, user, price, market) {
+        this.id = ++Order.n;
         this.type = type;
         this.side = side;
         this.quantity = quantity;
         this.user = user;
         this.unFilled = quantity;
         this.price = price;
+
+        nrp.emit("createOrder", {
+            id: this.id,
+            type: this.type,
+            side: this.side,
+            quantity :this.quantity,
+            username: user.username,
+            unFilled : this.unFilled,
+            price: this.price,
+            marketName : market.name
+        })
+
     }
+
+    // set unFilled(value){
+    //     nrp.emit('updateOrder',{id: this.id, unFilled: value} );
+    //     this.unFilled = value;
+    // }
 }
 
 class Trade {
 
-    constructor(price, quantity, maker, makerOrder, tackerOrder) {
+    constructor(price, quantity, maker, makerOrder, takerOrder) {
         this.price = price;
         this.quantity = quantity;
         this.maker = maker;
@@ -37,12 +56,20 @@ class Trade {
         const dateString = m.getUTCFullYear() + "/" + (m.getUTCMonth() + 1) + "/" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds();
         this.time = dateString;
         this.makerOrder = makerOrder;
-        this.tackerOrder = tackerOrder;
+        this.takerOrder = takerOrder;
         this.emit();
+
     }
 
     emit() {
         nrp.emit("newTrade", this);
+        nrp.emit('createTrade',{
+            price: this.price,
+            quantity: this.quantity,
+            maker: this.maker,
+            makerOrderId:this.makerOrder.id,
+            takerOrderId : this.takerOrder.id
+        })
     }
 }
 
@@ -61,7 +88,7 @@ class OrderBook {
     }
 
     add(order) {
-        order.id = ++(this.n);
+        // order.id = ++(this.n);
         if (order.side == 'buy') {
             this.bids.push(order);
             this.sortBids();
@@ -406,19 +433,19 @@ let matchEngine = new MatchingEngine("btcusdt");
 const user1 = new User("user1");
 const user2 = new User("user2");
 
-for (let i = 0; i < 10; i++) {
-    let price = 100 + i / 10;
-    let order = new Order('limit', 'sell',  Math.floor(Math.random() * 10) + 1, user1, price);
-    console.log(i,order)
-    matchEngine.match(order);
-}
-
-for (let i = 0; i < 10; i++) {
-    let price = 99 + i / 10;
-    let order = new Order('limit', 'buy', Math.floor(Math.random() * 10) + 1, user2, price);
-    console.log(i,order)
-    matchEngine.match(order);
-}
+// for (let i = 0; i < 1_000; i++) {
+//     let price = 100 + i / 10;
+//     let order = new Order('limit', 'sell',  Math.floor(Math.random() * 10) + 1, user1, price, matchEngine);
+//     console.log(i,order)
+//     matchEngine.match(order);
+// }
+//
+// for (let i = 0; i < 1_000; i++) {
+//     let price = 99 + i / 10;
+//     let order = new Order('limit', 'buy', Math.floor(Math.random() * 10) + 1, user2, price, matchEngine);
+//     console.log(i,order)
+//     matchEngine.match(order);
+// }
 
 console.log("sell orders \n id", "price", "quantity")
 for (const order of matchEngine.orderBook.asks) {
@@ -429,7 +456,7 @@ for (const order of matchEngine.orderBook.bids) {
     console.log(order.id, "|", order.price, "|", order.quantity);
 }
 
-let order = new Order('limit', 'buy', 3, user1,100.4);
+let order = new Order('limit', 'buy', 3, user1,100.4, matchEngine);
 matchEngine.match(order);
 
 

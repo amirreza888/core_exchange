@@ -6,8 +6,8 @@ const tradeSchema = new Schema({
     quantity: {type: Schema.Types.Decimal128, required: true,},
     maker: {type: Schema.Types.String, required: true,},
     makerOrder: {type: Schema.Types.ObjectId, required: true, ref: 'orders'},
-    tackerOrder: {type: Schema.Types.ObjectId, required: true, ref: 'orders'},
+    takerOrder: {type: Schema.Types.ObjectId, required: true, ref: 'orders'},
 }, {timestamps: true});
 
 
-module.exports = model('order', tradeSchema, 'orders');
+module.exports = model('trade', tradeSchema, 'trades');

@@ -16,20 +16,20 @@ nrp.on('addOrder',async (data)=>{
 })
 
 
-
 function orderAdder(job, done) {
     let {type, side, quantity,price=0, username} = job.data;
     price = Number(price);
     quantity = Number(quantity);
     // console.log(req.body)
     const user = new User(username);
-    const order = new Order(type, side, quantity, user, price);
+    const order = new Order(type, side, quantity, user, price, matchEngine);
 
     if (order.type === 'limit')
         matchEngine.match(order);
     else if (order.type === 'market')
         matchEngine.market(order);
     done()
+
 }
 
 
