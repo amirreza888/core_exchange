@@ -37,6 +37,7 @@ let price = Number();
 
 nrp.on('price', (data) => {
     price = data.price;
+    console.log(price)
     io.emit("price", data);
 });
 
@@ -75,7 +76,7 @@ nrp.on('bidsVolumeChange', (data) => {
 nrp.on('asksVolumeChange', (data) => {
     let i;
     const {price,volume} = data;
-    console.log(data);
+    // console.log(data);
     // console.log(asksVolume);
     for (i = asksVolume.length - 1; i >= 0; i--) {
         if (price <= asksVolume[i].price) {
@@ -93,7 +94,7 @@ nrp.on('asksVolumeChange', (data) => {
 
     if (asksVolume[i].volume === 0) {
         asksVolume.splice(i, 1);
-        console.log(asksVolume);
+        // console.log(asksVolume);
     }
 
     io.emit('asksVolumeChange', data);
@@ -145,6 +146,7 @@ app.get('/price', (req, res) => {
 
 app.post('/order', async (req, res) => {
     let {type, side, quantity, price=0,username = "user1"} = req.body;
+    console.log(side)
     nrp.emit("addOrder",{type, side, quantity,price, username});
     return res.json({status: true});
 })

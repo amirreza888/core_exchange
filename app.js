@@ -40,10 +40,14 @@ class Order {
 
     }
 
-    // set unFilled(value){
-    //     nrp.emit('updateOrder',{id: this.id, unFilled: value} );
-    //     this.unFilled = value;
-    // }
+    set _unFilled(value){
+        nrp.emit('updateOrder',{id: this.id, unFilled: value} );
+        this.unFilled = value;
+    }
+
+    get _unFilled(){
+        return this.unFilled
+    }
 }
 
 class Trade {
@@ -268,19 +272,19 @@ class MatchingEngine {
                     filled += volume;
                     let trade = new Trade(ask.price, volume, "ask",ask, order);
                     this.trades.push(trade);
-                    ask.unFilled -= volume;
+                    ask._unFilled -= volume;
                     this.orderBook.reduceAsksVolume(ask.price, volume);
                 }
             }
 
             if (filled < order.quantity) {
-                order.unFilled =  order.quantity - filled;
+                order._unFilled =  order.quantity - filled;
                 this.orderBook.add(order);
             }
 
             for (const ask of consumedAsks) {
                 this.orderBook.remove(ask);
-                ask.unFilled = 0;
+                ask._unFilled = 0;
             }
 
 
@@ -314,20 +318,20 @@ class MatchingEngine {
                     filled += volume;
                     let trade = new Trade(bid.price, volume, "bid",bid, order);
                     this.trades.push(trade);
-                    bid.unFilled -= volume;
+                    bid._unFilled -= volume;
                     this.orderBook.reduceBidsVolume(bid.price, volume);
                 }
 
             }
 
             if (filled < order.quantity) {
-                order.unFilled = order.quantity - filled;
+                order._unFilled = order.quantity - filled;
                 this.orderBook.add(order)
             }
 
             for (const bid of consumedBids) {
                 this.orderBook.remove(bid);
-                bid.unFilled = 0;
+                bid._unFilled = 0;
             }
 
 
@@ -345,6 +349,7 @@ class MatchingEngine {
             const consumedAsks = [];
 
             for (let i = this.orderBook.asks.length - 1; i >= 0; i--) {
+
                 let ask = this.orderBook.asks[i];
 
 
@@ -367,7 +372,7 @@ class MatchingEngine {
                     filled += volume;
                     let trade = new Trade(ask.price, volume, "ask",ask, order);
                     this.trades.push(trade);
-                    ask.unFilled -= volume;
+                    ask._unFilled -= volume;
                     this.orderBook.reduceAsksVolume(ask.price, volume);
                 }
             }
@@ -378,7 +383,7 @@ class MatchingEngine {
 
             for (const ask of consumedAsks) {
                 this.orderBook.remove(ask);
-                ask.unFilled = 0;
+                ask._unFilled = 0;
             }
         } else if (order.side === 'sell') {
 
@@ -408,7 +413,7 @@ class MatchingEngine {
                     filled += volume;
                     const trade = new Trade(bid.price, volume, "bid",bid, order);
                     this.trades.push(trade);
-                    bid.unFilled -= volume;
+                    bid._unFilled -= volume;
                     this.orderBook.reduceBidsVolume(bid.price, volume);
                 }
 
@@ -421,7 +426,7 @@ class MatchingEngine {
             for (const bid of consumedBids) {
 
                 this.orderBook.remove(bid);
-                bid.unFilled = 0;
+                bid._unFilled = 0;
             }
 
         }
@@ -433,19 +438,19 @@ let matchEngine = new MatchingEngine("btcusdt");
 const user1 = new User("user1");
 const user2 = new User("user2");
 
-// for (let i = 0; i < 1_000; i++) {
-//     let price = 100 + i / 10;
-//     let order = new Order('limit', 'sell',  Math.floor(Math.random() * 10) + 1, user1, price, matchEngine);
-//     console.log(i,order)
-//     matchEngine.match(order);
-// }
-//
-// for (let i = 0; i < 1_000; i++) {
-//     let price = 99 + i / 10;
-//     let order = new Order('limit', 'buy', Math.floor(Math.random() * 10) + 1, user2, price, matchEngine);
-//     console.log(i,order)
-//     matchEngine.match(order);
-// }
+for (let i = 0; i < 10; i++) {
+    let price = 100 + i / 10;
+    let order = new Order('limit', 'sell',  Math.floor(Math.random() * 10) + 1, user1, price, matchEngine);
+    console.log(i,order)
+    matchEngine.match(order);
+}
+
+for (let i = 0; i < 10; i++) {
+    let price = 99 + i / 10;
+    let order = new Order('limit', 'buy', Math.floor(Math.random() * 10) + 1, user2, price, matchEngine);
+    console.log(i,order)
+    matchEngine.match(order);
+}
 
 console.log("sell orders \n id", "price", "quantity")
 for (const order of matchEngine.orderBook.asks) {
@@ -456,8 +461,8 @@ for (const order of matchEngine.orderBook.bids) {
     console.log(order.id, "|", order.price, "|", order.quantity);
 }
 
-let order = new Order('limit', 'buy', 3, user1,100.4, matchEngine);
-matchEngine.match(order);
+// let order = new Order('limit', 'buy', 3, user1,100.4, matchEngine);
+// matchEngine.match(order);
 
 
 console.log("----------------------------------------------------------------------")

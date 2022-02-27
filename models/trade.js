@@ -5,8 +5,8 @@ const tradeSchema = new Schema({
     price: {type: Schema.Types.Decimal128, required: true,},
     quantity: {type: Schema.Types.Decimal128, required: true,},
     maker: {type: Schema.Types.String, required: true,},
-    makerOrder: {type: Schema.Types.ObjectId, required: true, ref: 'orders'},
-    takerOrder: {type: Schema.Types.ObjectId, required: true, ref: 'orders'},
+    makerInternalId: {type: Schema.Types.String, required: true, ref: 'orders'},
+    takerInternalId: {type: Schema.Types.String, required: true, ref: 'orders'},
 }, {timestamps: true});
 
 

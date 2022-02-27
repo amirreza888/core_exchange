@@ -14,10 +14,10 @@ const orderSchema = new Schema({
         enum: ['buy', 'sell']
     },
     quantity: {type: Schema.Types.Decimal128, required: true,},
-    user: {type: Schema.Types.ObjectId, required: true , ref: 'users'},
+    user: {type: Schema.Types.String, required: true , ref: 'users'},
     unFilled: {type: Schema.Types.Decimal128, required: true,},
     price: {type: Schema.Types.Decimal128, required: false,},
-    market: {type: Schema.Types.ObjectId, required: true,},
+    market: {type: Schema.Types.String, required: true,},
 }, {timestamps: true});
 
 
