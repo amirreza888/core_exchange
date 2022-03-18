@@ -8,16 +8,33 @@ const matchEngineQueue = new Queue('MEQ', {
         port: "6379",
     },
 });
-matchEngineQueue.process('addOrder', orderAdder);
 
-nrp.on('addOrder',async (data)=>{
-    console.log(data)
-    await matchEngineQueue.add('addOrder', data);
-})
+const queue = 'addOrder';
+
+const open = require('amqplib').connect('amqp://localhost');
 
 
-function orderAdder(job, done) {
-    let {type, side, quantity,price=0, username} = job.data;
+open.then(function(conn) {
+    return conn.createChannel();
+}).then(function(ch) {
+    return ch.assertQueue(queue,{durable: true}).then(function(ok) {
+        return ch.consume(queue, function(msg) {
+            if (msg !== null) {
+                let data = JSON.parse(msg.content.toString());
+                console.log(data)
+                orderAdder(data);
+                ch.ack(msg);
+            }
+        }, {
+            noAck: false
+        }
+        );
+    });
+}).catch(console.warn);
+
+
+function orderAdder(data) {
+    let {type, side, quantity,price=0, username} = data;
     price = Number(price);
     quantity = Number(quantity);
     // console.log(req.body)
@@ -28,7 +45,6 @@ function orderAdder(job, done) {
         matchEngine.match(order);
     else if (order.type === 'market')
         matchEngine.market(order);
-    done()
 
 }
 

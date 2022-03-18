@@ -92,7 +92,6 @@ class OrderBook {
     }
 
     add(order) {
-        // order.id = ++(this.n);
         if (order.side == 'buy') {
             this.bids.push(order);
             this.sortBids();
@@ -244,7 +243,7 @@ class MatchingEngine {
     }
 
     match(order) {
-        if (order.side == 'buy' && this.orderBook.asks.length && order.price >= this.orderBook.asks[this.orderBook.asks.length - 1].price) {
+        if (order.side === 'buy' && this.orderBook.asks.length && order.price >= this.orderBook.asks[this.orderBook.asks.length - 1].price) {
             let filled = 0;
             const consumedAsks = [];
 
